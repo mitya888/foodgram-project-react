@@ -23,6 +23,9 @@ class User(AbstractUser):
         max_length=150,
         verbose_name='Фамилия',
     )
+    following = models.ManyToManyField(
+        'self', through='Follow', related_name='followers', symmetrical=False
+    )
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
@@ -39,27 +42,32 @@ class User(AbstractUser):
 class Follow(models.Model):
     """Модель подписок"""
 
-    user = models.ForeignKey(
+    subscriber = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='follower',
+        related_name='rel_from',
         verbose_name='Подписчик',
     )
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='following',
+        related_name='rel_to',
         verbose_name='Автор',
+    )
+    created = models.DateTimeField(
+        auto_now_add=True,
+        db_index=True
     )
 
     class Meta:
-        constraints = [models.UniqueConstraint(
-            fields=['user', 'author'],
-            name='unigue_subscriber',
-        )]
-        ordering = ['-author']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['subscriber', 'author'],
+                name='unigue_subscriber',
+            )]
+        ordering = ['-created']
         verbose_name = 'Подписка'
         verbose_name_plural = 'Подписки'
 
     def __str__(self):
-        return self.author[:10]
+        return f'{self.subscriber} - {self.author}'
