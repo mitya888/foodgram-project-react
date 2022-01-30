@@ -26,6 +26,8 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'django_filters',
     'djoser',
+    # 'drf-yasg',
+    'drf_yasg2',
 ]
 
 AUTH_USER_MODEL = 'users.User'
@@ -116,3 +118,32 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'basic': {'type': 'basic'},
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'description': 'Value example: Bearer ******************',
+            'in': 'header',
+        },
+        'Api-Key': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'description': 'Value example: <API_KEY_HEADER> <API_KEY>',
+            'in': 'header',
+        },
+        'Language': {
+            'type': 'apiKey',
+            'name': 'Accept-Language',
+            'in': 'header',
+            'description': 'Your language code. Example: ua,ru,en',
+            'default': 'en',
+        },
+    },
+    'USE_SESSION_AUTH': True,
+    'JSON_EDITOR': False,
+    'LOGOUT_URL': 'rest_framework:logout',
+    'DEFAULT_MODEL_RENDERING': 'example',
+}

@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.urls import include, path
 from djoser.views import TokenCreateView, TokenDestroyView
+from .yasg import urlpatterns as doc_urls
 
 api_patterns = [
     path('', include('users.urls')),
@@ -13,3 +14,5 @@ urlpatterns = [
     path('api/', include(api_patterns)),
 
 ]
+
+urlpatterns += doc_urls

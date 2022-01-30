@@ -2,7 +2,9 @@ from django.contrib.auth import get_user_model
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from rest_framework import serializers
 
+
 from .models import Follow
+from recipes.serializers import RecipeSerializer
 
 User = get_user_model()
 
@@ -28,9 +30,12 @@ class FollowSerializer(serializers.ModelSerializer):
 
 
 class ListFollowingSerializer(serializers.ModelSerializer):
+    recipes_count = serializers.IntegerField()
+    recipes = RecipeSerializer(many=True)
+
     class Meta:
         model = User
         fields = (
             'id', 'email', 'username', 'first_name', 'last_name',
-            # 'is_subscribed', 'recipes', 'recipes_count'
+            'recipes_count', 'recipes'
         )
