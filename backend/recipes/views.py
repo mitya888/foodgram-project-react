@@ -1,17 +1,13 @@
 from django.shortcuts import get_object_or_404
-from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .filters import IngredientsFilter, RecipeFilter
-from .mixins import RetriveAndListViewSet
 from .models import (Favorite, Ingredient, Recipe,
 from .permissions import IsAuthorOrAdmin
 from .serializers import (AddRecipeSerializer, FavouriteSerializer,
-                          IngredientsSerializer, ShoppingListSerializer,
-                          ShowRecipeFullSerializer, TagsSerializer)
-from users.paginator import CustomPageNumberPaginator
+                          IngredientsSerializer, ShoppingListSerializer)
 
 
 class IngredientsViewSet(RetriveAndListViewSet):
@@ -66,3 +62,12 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 'Нет данного рецепта в избранном',
                 status=status.HTTP_400_BAD_REQUEST,
             )
+
+    @action(detail=True, permission_classes=[IsAuthorOrAdmin])
+    def shopping_cart(self, request, pk):
+        data = {'user': request.user.id, 'recipe': pk}
+        serializer = ShoppingListSerializer(data=data,
+                                            context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
