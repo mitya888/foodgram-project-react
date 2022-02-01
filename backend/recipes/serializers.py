@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from .models import (Ingredient, RecipeIngredient, Tag)
+from .models import (Favorite, Ingredient, RecipeIngredient, Tag)
 
 User = get_user_model()
 
@@ -37,3 +37,24 @@ class ShowRecipeIngredientsSerializer(serializers.ModelSerializer):
     class Meta:
         model = RecipeIngredient
         fields = ('id', 'name', 'measurement_unit', 'amount')
+
+
+class FavouriteSerializer(serializers.ModelSerializer):
+    recipe = serializers.PrimaryKeyRelatedField(queryset=Recipe.objects.all())
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+
+    class Meta:
+        model = Favorite
+        fields = ('user', 'recipe')
+
+    def validate(self, data):
+        user = data['user']
+        recipe_id = data['recipe'].id
+        if Favorite.objects.filter(user=user, recipe__id=recipe_id).exists():
+            raise ValidationError('Рецепт уже добавлен в избранное!')
+        return data
+
+    def to_representation(self, instance):
+        request = self.context.get('request')
+        context = {'request': request}
+        return ShowRecipeSerializer(instance.recipe, context=context).data
