@@ -3,28 +3,26 @@ from django.db import models
 
 
 class User(AbstractUser):
-    """Модель кастомного юзера"""
-
     email = models.EmailField(
-        max_length=200,
+        max_length=254,
         unique=True,
-        verbose_name='Почта',
+        verbose_name='Электронная почта'
     )
     username = models.CharField(
-        max_length=100,
+        max_length=150,
+        blank=False,
         unique=True,
-        verbose_name='Логин',
+        verbose_name='Имя пользователя'
     )
     first_name = models.CharField(
         max_length=150,
-        verbose_name='Имя',
+        blank=False,
+        verbose_name='Имя'
     )
     last_name = models.CharField(
         max_length=150,
-        verbose_name='Фамилия',
-    )
-    following = models.ManyToManyField(
-        'self', through='Follow', related_name='followers', symmetrical=False
+        blank=False,
+        verbose_name='Фамилия'
     )
 
     USERNAME_FIELD = 'email'
@@ -40,34 +38,26 @@ class User(AbstractUser):
 
 
 class Follow(models.Model):
-    """Модель подписок"""
-
-    subscriber = models.ForeignKey(
+    user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='rel_from',
-        verbose_name='Подписчик',
+        related_name='follower',
+        verbose_name='Подписчик'
     )
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='rel_to',
-        verbose_name='Автор',
-    )
-    created = models.DateTimeField(
-        auto_now_add=True,
-        db_index=True
+        related_name='following',
+        verbose_name='Автор, на которого подписываются'
     )
 
     class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=['subscriber', 'author'],
-                name='unigue_subscriber',
-            )]
-        ordering = ['-created']
+        constraints = [models.UniqueConstraint(
+            fields=['user', 'author'],
+            name='unigue_subscriber'
+        )]
         verbose_name = 'Подписка'
         verbose_name_plural = 'Подписки'
 
     def __str__(self):
-        return f'{self.subscriber} - {self.author}'
+        return f'{self.user} подписан на {self.author}'

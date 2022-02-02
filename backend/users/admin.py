@@ -1,21 +1,20 @@
 from django.contrib import admin
-from users.models import Follow, User
-from django.contrib.auth.admin import UserAdmin
+
+from .models import Follow, User
 
 
 @admin.register(User)
-class CustomUserAdmin(UserAdmin):
-    pass
-    # list_display = (
-    #     'id', 'username', 'email', 'first_name', 'last_name', 'password',
-    # )
-    # list_filter = ('username', 'email')
-    # search_fields = ('username', 'email')
-    # empty_value_display = '-пусто-'
+class UserAdmin(admin.ModelAdmin):
+    list_display = (
+        'pk', 'username', 'email', 'first_name', 'last_name', 'password'
+    )
+    list_filter = ('username', 'email')
+    search_fields = ('username', 'email')
+    empty_value_display = 'N/A'
 
 
 @admin.register(Follow)
 class FollowAdmin(admin.ModelAdmin):
-    list_display = ('id', 'subscriber', 'author')
-    list_filter = ('subscriber', 'author')
-    empty_value_display = '-пусто-'
+    list_display = ('pk', 'user', 'author')
+    list_filter = ('user', 'author')
+    empty_value_display = 'N/A'
