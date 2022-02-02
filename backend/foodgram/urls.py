@@ -1,19 +1,16 @@
 from django.contrib import admin
 from django.urls import include, path
-from djoser.views import TokenCreateView, TokenDestroyView
 from .yasg import urlpatterns as doc_urls
 
 api_patterns = [
-    path('', include('users.urls')),
-    path('auth/token/login/', TokenCreateView.as_view(), name='login'),
-    path('auth/token/logout/', TokenDestroyView.as_view(), name='logout'),
+    path('', include('recipes.urls')),
+    path('', include('users.urls'))
 ]
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(api_patterns)),
-    path('api/', include('rest_framework.urls')),
-
+    path('api/', include('rest_framework.urls'))
 ]
 
 urlpatterns += doc_urls
