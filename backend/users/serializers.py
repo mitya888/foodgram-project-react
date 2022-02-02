@@ -74,3 +74,17 @@ class ShowFollowSerializer(serializers.ModelSerializer):
         if not request or request.user.is_anonymous:
             return False
         return obj.follower.filter(user=obj, author=request.user).exists()
+
+    def get_recipes(self, obj):
+        request = self.context.get('request')
+        recipes_limit = request.query_params.get('recipes_limit')
+        if recipes_limit is not None:
+            recipes = obj.recipes.all()[:(int(recipes_limit))]
+        else:
+            recipes = obj.recipes.all()
+        context = {'request': request}
+        return FollowingRecipesSerializers(recipes, many=True,
+                                           context=context).data
+
+    def get_recipes_count(self, obj):
+        return obj.recipes.count()
