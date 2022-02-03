@@ -5,7 +5,7 @@ from rest_framework.response import Response
 
 from .filters import IngredientsFilter, RecipeFilter
 from .models import (Favorite, Ingredient, Recipe,
-from .permissions import IsAuthorOrAdmin
+# from .permissions import IsAuthorOrAdmin
 from .serializers import (AddRecipeSerializer, FavouriteSerializer,
                           IngredientsSerializer, ShoppingListSerializer)
 
