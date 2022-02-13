@@ -3,26 +3,26 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv('SECRET_KEY', default='django-insecure-@=fy3xy%071+5398q9dr@_%15f6%k7q17pwsk1vxni)f!h=inw')
+SECRET_KEY = os.getenv('SECRET_KEY',
+                       default='pu$vd_(5k7-jcj@q-2q)_$&-c+dw^ti#azh(t1sk4f(jl(*$)m')
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
+    'recipes',
+    'users',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'users',
-    'recipes',
     'rest_framework',
     'rest_framework.authtoken',
     'django_filters',
     'djoser',
-    'drf_yasg',
 ]
 
 AUTH_USER_MODEL = 'users.User'
@@ -59,7 +59,8 @@ WSGI_APPLICATION = 'foodgram.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': os.environ.get('DB_ENGINE', default='django.db.backends.sqlite3'),
+        'ENGINE': os.environ.get('DB_ENGINE',
+                                 default='django.db.backends.sqlite3'),
         'NAME': os.environ.get('DB_NAME', default='test'),
         'USER': os.environ.get('DB_USER', default='test'),
         'PASSWORD': os.environ.get('DB_PASSWORD', default='test.sqlite3'),
@@ -70,16 +71,20 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib'
+                '.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': 'django.contrib'
+                '.auth.password_validation.MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': 'django.contrib'
+                '.auth.password_validation.CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': 'django.contrib'
+                '.auth.password_validation.NumericPasswordValidator',
     },
 ]
 
@@ -130,32 +135,3 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/mediafiles/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-SWAGGER_SETTINGS = {
-    'SECURITY_DEFINITIONS': {
-        'basic': {'type': 'basic'},
-        'Bearer': {
-            'type': 'apiKey',
-            'name': 'Authorization',
-            'description': 'Value example: Bearer ******************',
-            'in': 'header',
-        },
-        'Api-Key': {
-            'type': 'apiKey',
-            'name': 'Authorization',
-            'description': 'Value example: <API_KEY_HEADER> <API_KEY>',
-            'in': 'header',
-        },
-        'Language': {
-            'type': 'apiKey',
-            'name': 'Accept-Language',
-            'in': 'header',
-            'description': 'Your language code. Example: ua,ru,en',
-            'default': 'en',
-        },
-    },
-    'USE_SESSION_AUTH': True,
-    'JSON_EDITOR': False,
-    'LOGOUT_URL': 'rest_framework:logout',
-    'DEFAULT_MODEL_RENDERING': 'example',
-}

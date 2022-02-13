@@ -47,3 +47,4 @@ class RecipeFilter(filters.FilterSet):
         if self.request.user.is_authenticated and item_value:
             queryset = queryset.filter(shopping_cart__user=self.request.user)
         return queryset
+
