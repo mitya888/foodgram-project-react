@@ -4,7 +4,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY',
-                       default='pu$vd_(5k7-jcj@q-2q)_$&-c+dw^ti#azh(t1sk4f(jl(*$)m')
+                       default='django-insecure-@=fy3xy%071+5398q9dr@_%15f6%k7q17pwsk1vxni)f!h=inw')
 
 DEBUG = True
 
@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'django_filters',
     'djoser',
+    'drf_yasg',
 ]
 
 AUTH_USER_MODEL = 'users.User'
@@ -135,3 +136,32 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/mediafiles/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'basic': {'type': 'basic'},
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'description': 'Value example: Bearer ******************',
+            'in': 'header',
+        },
+        'Api-Key': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'description': 'Value example: <API_KEY_HEADER> <API_KEY>',
+            'in': 'header',
+        },
+        'Language': {
+            'type': 'apiKey',
+            'name': 'Accept-Language',
+            'in': 'header',
+            'description': 'Your language code. Example: ua,ru,en',
+            'default': 'en',
+        },
+    },
+    'USE_SESSION_AUTH': True,
+    'JSON_EDITOR': False,
+    'LOGOUT_URL': 'rest_framework:logout',
+    'DEFAULT_MODEL_RENDERING': 'example',
+}
