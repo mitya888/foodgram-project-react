@@ -1,38 +1,26 @@
 
 ## foodgram-project-react
 ### Описание
-Продуктовая соц. сеть для любителей рецептов
+Продуктовая социальная сеть для публикации рецептов и 
+составление продуктовой корзины исходя из их ингридиентов
 
 ### Проект доступен по ссылке :
-http://178.154.214.91/recipes -Front
-
-http://178.154.214.91/api/ - Api
-
-http://178.154.214.91/api/docs/ - Redoc
-
-http://178.154.214.91/admin/ - admin
-
-login - admin@admin.ru
-pass - admin
-
- 
-
-
+http://62.84.112.243/
 
 ## Описание Workflow
 
 ##### Workflow состоит из четырёх шагов:
 
-1. Проверка кода на соответствие PEP8, запуск тестов проекта.
+1. Проверка кода на соответствие PEP8.
 2. Сборка и публикация образа на DockerHub.
-3. Автоматический деплой на выбранный сервер.
+3. Автоматический деплой на сервер.
 4. Отправка ботом уведомления в телеграм-чат.
 
 
 ## Подготовка и запуск проекта
 ##### Клонирование репозитория
 ```bash
-git clone https://github.com/lindex/foodgram-project-react.git
+git clone https://github.com/mitya888/foodgram-project-react
 ```
 
 ## Установка на удаленном сервере (Ubuntu):
@@ -60,14 +48,14 @@ sudo chmod +x /usr/local/bin/docker-compose
 
 
 ```bash
-scp docker-compose.yaml <username>@<host>:/home/<username>/docker-compose.yaml
+scp docker-compose.yml <username>@<host>:/home/<username>/docker-compose.yml
 scp -r nginx/ <username>@<host>:/home/<username>/
 ```
 
 ##### Шаг 5.  Добавление Github Secrets:
 Для работы с Workflow добавьте в Secrets GitHub переменные окружения для работы:
 ```bash
-SECRET_KEY=<SECRET_KEY>
+SECRET_KEY=<SECRET_KEY> (django project)
 DEBUG=<True/False>
 ALLOWED_HOSTS=<hosts>
 
@@ -78,8 +66,8 @@ POSTGRES_PASSWORD=postgres
 DB_HOST=db
 DB_PORT=5432
 
-DOCKER_PASSWORD=<pass DockerHub>
 DOCKER_USERNAME=<login DockerHub>
+DOCKER_PASSWORD=<pass DockerHub>
 
 USER=<username для подключения к серверу>
 HOST=<IP сервера>
@@ -87,15 +75,9 @@ PASSPHRASE=<passphrase для сервера, если он установлен
 SSH_KEY=<SSH ключ>
 
 TELEGRAM_TO=<ID своего телеграм-аккаунта. Для инфо @myidbot>
-TELEGRAM_TOKEN=<токен бота>
+TELEGRAM_TOKEN=<токен бота fatherbot>
 ```
 
 ##### Шаг 6. После успешного деплоя:
 
 Статика и миграции применяются автоматически
-
-### Участники
-
-студенты курса Python-разработчик в Яндекс.Практикуме
-- [lindex](https://github.com/lindex/) - Марк
-[mitya888](https://github.com/mitya888/) - Дмитрий
