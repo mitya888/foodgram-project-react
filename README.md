@@ -7,6 +7,11 @@
 ### Проект доступен по ссылке :
 http://62.84.112.243/
 
+http://62.84.112.243/admin/ 
+
+login - admin@admin.ru, pass - admin
+
+
 ## Описание Workflow
 
 ##### Workflow состоит из четырёх шагов:
