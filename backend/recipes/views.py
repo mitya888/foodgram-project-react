@@ -80,7 +80,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         return self.create_favorite_or_shopping_cart(request, pk, ShoppingListSerializer)
 
     @shopping_cart.mapping.delete
-    def delete_favorite(self, request, pk):
+    def delete_shopping_cart(self, request, pk):
         return self.delete_favorite_or_shopping_cart(request=request, pk=pk, object_instance=ShoppingList)
 
     @action(detail=False, permission_classes=[permissions.IsAuthenticated])
