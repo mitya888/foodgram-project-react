@@ -50,6 +50,18 @@ class RecipeViewSet(viewsets.ModelViewSet):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+    @staticmethod
+    def delete_favorite_or_shopping_cart(request, pk, object_instance):
+        recipe = get_object_or_404(Recipe, id=pk)
+        try:
+            object_instance.objects.get(user=request.user, recipe=recipe).delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Favorite.DoesNotExist:
+            return Response(
+                'Нет данного рецепта',
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
     def get_serializer_class(self):
         if self.request.method == 'GET':
             return ShowRecipeFullSerializer
@@ -61,42 +73,15 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     @favorite.mapping.delete
     def delete_favorite(self, request, pk):
-        recipe = get_object_or_404(Recipe, id=pk)
-        try:
-            Favorite.objects.get(user=request.user, recipe=recipe).delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        except Favorite.DoesNotExist:
-            return Response(
-                'Нет данного рецепта в избранном',
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        return self.delete_favorite_or_shopping_cart(request=request, pk=pk, object_instance=Favorite)
 
     @action(detail=True, permission_classes=[IsAuthorOrAdmin])
     def shopping_cart(self, request, pk):
         return self.create_favorite_or_shopping_cart(request, pk, ShoppingListSerializer)
 
     @shopping_cart.mapping.delete
-    def delete_shopping_cart(self, request, pk):
-        if request.user.is_anonymous:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
-        try:
-            recipe = Recipe.objects.get(id=pk)
-            shopping_list = ShoppingList.objects.get(
-                user=request.user,
-                recipe=recipe,
-            )
-            shopping_list.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        except Recipe.DoesNotExist:
-            return Response(
-                'Нет данного рецепта в списке покупок',
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        except ShoppingList.DoesNotExist:
-            return Response(
-                'Нет данного рецепта в списке покупок',
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+    def delete_favorite(self, request, pk):
+        return self.delete_favorite_or_shopping_cart(request=request, pk=pk, object_instance=ShoppingList)
 
     @action(detail=False, permission_classes=[permissions.IsAuthenticated])
     def download_shopping_cart(self, request):
